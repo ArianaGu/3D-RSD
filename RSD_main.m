@@ -1,7 +1,7 @@
 clear;
 close all;
 %% Load scene data
-scene_index = 0;
+scene_index = 10;
 load(['./data/scene_' int2str(scene_index) '_raw.mat']);
 
 %% Set up parameters
@@ -81,21 +81,21 @@ flip_and_show(depth_img, 'depth map');
 % save(['./data/scene_' int2str(scene_index) '_recon_noise_05.mat'], 'img');
 
 %% print SSIM with respect to BP recon
-rsd_img = img / max(img(:));
-
-load(['./BP/volume/scene_' int2str(scene_index) '.mat'])
-W = abs(W_c);
-W = permute(W, [2 3 1]);
-
-% Denoise
-for i = 1:size(W, 3)
-    W(:,:,i) = W(:,:,i)*(i*sampling_grid_spacing + minimalpos(3))^2;
-end
-
-% Compute SSIM
-[bp_img, ~] = max(W,[],3);
-bp_img = bp_img / max(bp_img(:));
-ssim(rsd_img, bp_img)
+% rsd_img = img / max(img(:));
+% 
+% load(['./BP/volume/scene_' int2str(scene_index) '.mat'])
+% W = abs(W_c);
+% W = permute(W, [2 3 1]);
+% 
+% % Denoise
+% for i = 1:size(W, 3)
+%     W(:,:,i) = W(:,:,i)*(i*sampling_grid_spacing + minimalpos(3))^2;
+% end
+% 
+% % Compute SSIM
+% [bp_img, ~] = max(W,[],3);
+% bp_img = bp_img / max(bp_img(:));
+% ssim(rsd_img, bp_img)
 
 
 %% functions
@@ -107,10 +107,10 @@ function [] = flip_and_show(img, title_str)
     figure;
     imagesc(img);
     colormap 'hot';
-%     title(title_str);
+    title(title_str);
     axis image;
     axis off;
-%     colorbar;
+    colorbar;
 end
 
 function  new_volume = fit_space(padding_volume, camera_pos, u_total, M, N, sample_spacing, depth_spacing, pad_size)
